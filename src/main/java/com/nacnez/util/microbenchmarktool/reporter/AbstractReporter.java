@@ -49,8 +49,10 @@ public abstract class AbstractReporter {
 			}
 		}
 		
-		writer.close();
+		closeWriter();
 	}
+
+	protected abstract void closeWriter();
 
 	private void printAverage(TaskExecutionOutput output, long sum, int count) {
 		long average = sum/count;

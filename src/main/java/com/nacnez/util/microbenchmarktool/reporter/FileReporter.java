@@ -13,5 +13,10 @@ public class FileReporter extends AbstractReporter implements ExecutionReporter 
 		this.writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
 	}
 
+	@Override
+	protected void closeWriter() {
+		writer.close();
+	}
+
 
 }

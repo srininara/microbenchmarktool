@@ -7,29 +7,29 @@ import com.nacnez.util.microbenchmarktool.TimedTask;
 import com.nacnez.util.microbenchmarktool.TimedTaskExecutor;
 
 public class SimpleExecutor implements TimedTaskExecutor {
-	
+
 	ExecutionReporter reporter;
-	
+
 	public TimedTaskExecutor with(ExecutionReporter reporter) {
 		this.reporter = reporter;
 		return this;
 	}
 
-
 	public TimedTaskExecutor execute(TimedTask task) {
-		this.execute(task,DEFAULT_REPEATS);
+		this.execute(task, DEFAULT_REPEATS);
 		return this;
 	}
 
 	public TimedTaskExecutor execute(TimedTask task, int repeats) {
 		reporterMustBePresent();
 		taskMustBeValid(task);
-		for (int i=0;i<repeats;i++) {
-			TimedTask localTask = task.hasAnyKindOfState()?task.clone():task;
-	        long startTime = System.currentTimeMillis();
+		for (int i = 0; i < repeats; i++) {
+			TimedTask localTask = task.hasAnyKindOfState() ? task.clone()
+					: task;
+			long startTime = System.currentTimeMillis();
 			localTask.doTask();
-			long finishedTimeInMilliSecs = (System.currentTimeMillis()-startTime);
-			reporter.collect(createOutput(task,i,finishedTimeInMilliSecs));
+			long finishedTimeInMilliSecs = (System.currentTimeMillis() - startTime);
+			reporter.collect(createOutput(localTask, i, finishedTimeInMilliSecs));
 		}
 		return this;
 	}
@@ -37,9 +37,9 @@ public class SimpleExecutor implements TimedTaskExecutor {
 	public void report() throws MicroBenchmarkToolException {
 		reporterMustBePresent();
 		try {
-		reporter.report();
+			reporter.report();
 		} catch (Exception e) {
-			throw new MicroBenchmarkToolException(PROBLEM_WITH_REPORTING,e);
+			throw new MicroBenchmarkToolException(PROBLEM_WITH_REPORTING, e);
 		}
 	}
 
@@ -60,13 +60,9 @@ public class SimpleExecutor implements TimedTaskExecutor {
 		}
 	}
 
-	
-	
-
 	private static final String REPORTER_REQUIRED = "Executor needs the collector before execute";
 	private static final String INVALID_TASK = "Executor can't execute a null task";
 	private static final String PROBLEM_WITH_REPORTING = "Problem with reporting";
 	private static final int DEFAULT_REPEATS = 1;
-
 
 }

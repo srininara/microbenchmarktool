@@ -14,4 +14,9 @@ public class StdOutReporter extends AbstractReporter implements ExecutionReporte
 		this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
 	}
 
+	@Override
+	protected void closeWriter() {
+		// Don't do anything since we don't want to close the standard output. The caller might be using it as well.
+	}
+
 }
