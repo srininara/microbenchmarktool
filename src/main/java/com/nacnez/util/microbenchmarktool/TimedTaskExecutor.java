@@ -1,7 +1,8 @@
 package com.nacnez.util.microbenchmarktool;
 
 public interface TimedTaskExecutor {
-	void needs(ExecutionTimeCollector collector);
-	void execute(TimedTask task);
-	void execute(TimedTask task, int repeats);
+	TimedTaskExecutor with(ExecutionReporter reporter);
+	TimedTaskExecutor execute(TimedTask task);
+	TimedTaskExecutor execute(TimedTask task, int repeats);
+	void report() throws MicroBenchmarkToolException;
 }
