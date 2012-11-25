@@ -2,6 +2,7 @@ package com.nacnez.util.microbenchmarktool.core;
 
 import com.nacnez.util.microbenchmarktool.ExecutionReporter;
 import com.nacnez.util.microbenchmarktool.MicroBenchmarkToolException;
+import com.nacnez.util.microbenchmarktool.OutputType;
 import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
 import com.nacnez.util.microbenchmarktool.TimedTask;
 import com.nacnez.util.microbenchmarktool.TimedTaskExecutor;
@@ -23,13 +24,10 @@ public class SimpleExecutor implements TimedTaskExecutor {
 	public TimedTaskExecutor execute(TimedTask task, int repeats) {
 		reporterMustBePresent();
 		taskMustBeValid(task);
+		doWarmup(task);
+		OutputType type = OutputType.MEASUREMENT;
 		for (int i = 0; i < repeats; i++) {
-			TimedTask localTask = task.hasAnyKindOfState() ? task.clone()
-					: task;
-			long startTime = System.currentTimeMillis();
-			localTask.doTask();
-			long finishedTimeInMilliSecs = (System.currentTimeMillis() - startTime);
-			reporter.collect(createOutput(localTask, i, finishedTimeInMilliSecs));
+			executeAndMeasure(task, type, i);
 		}
 		return this;
 	}
@@ -43,9 +41,24 @@ public class SimpleExecutor implements TimedTaskExecutor {
 		}
 	}
 
-	private TaskExecutionOutput createOutput(TimedTask task, int iteration,
+	private void executeAndMeasure(TimedTask task, OutputType type, int i) {
+		TimedTask localTask = task.hasAnyKindOfState() ? task.clone()
+				: task;
+		long startTime = System.currentTimeMillis();
+		localTask.doTask();
+		long finishedTimeInMilliSecs = (System.currentTimeMillis() - startTime);
+		reporter.collect(createOutput(localTask, type, i, finishedTimeInMilliSecs));
+	}
+
+	private void doWarmup(TimedTask task) {
+		if (task.idemPotent()) {
+			executeAndMeasure(task, OutputType.WARMUP, 0);
+		}
+	}
+
+	private TaskExecutionOutput createOutput(TimedTask task, OutputType type, int iteration,
 			long executionTimeInMilliSecs) {
-		return new SimpleOutput(task, iteration, executionTimeInMilliSecs);
+		return new SimpleOutput(task, type, iteration, executionTimeInMilliSecs);
 	}
 
 	private void taskMustBeValid(TimedTask task) {

@@ -12,5 +12,7 @@ public interface TimedTask extends Serializable {
 	
 	boolean hasAnyKindOfState();
 	
+	boolean idemPotent();
+	
 	TimedTask clone();
 }

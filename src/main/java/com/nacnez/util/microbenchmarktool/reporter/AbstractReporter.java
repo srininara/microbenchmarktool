@@ -6,79 +6,67 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nacnez.util.microbenchmarktool.OutputType;
 import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
+import com.nacnez.util.microbenchmarktool.reporter.format.OutputFormat;
 
 public abstract class AbstractReporter {
 
-	private Map<String,List<TaskExecutionOutput>> mappedOutputs = new HashMap<String,List<TaskExecutionOutput>>();
+	private Map<String, List<TaskExecutionOutput>> mappedOutputs = new HashMap<String, List<TaskExecutionOutput>>();
 	protected boolean reportProgress;
 	protected PrintWriter writer;
+	private OutputFormat outputFormat;
 
-	public AbstractReporter() {
-		super();
+	public AbstractReporter(OutputFormat outputFormat, boolean reportProgress,
+			PrintWriter writer) {
+		this.outputFormat = outputFormat;
+		this.reportProgress = reportProgress;
+		this.writer = writer;
 	}
 
 	public void collect(TaskExecutionOutput output) {
-		List<TaskExecutionOutput> outputs = mappedOutputs.get(output.task().name()); 
+		List<TaskExecutionOutput> outputs = mappedOutputs.get(output.task()
+				.name());
 		if (outputs == null) {
-			mappedOutputs.put(output.task().name(), new ArrayList<TaskExecutionOutput>());
+			mappedOutputs.put(output.task().name(),
+					new ArrayList<TaskExecutionOutput>());
 			outputs = mappedOutputs.get(output.task().name());
 		}
 		outputs.add(output);
 		if (reportProgress) {
-			printTaskOutput(output);
+			print(outputFormat.getTaskOutput(output));
 		}
 	}
 
 	public void report() throws Exception {
-		
-		for(String taskName : mappedOutputs.keySet()) {
+
+		for (String taskName : mappedOutputs.keySet()) {
 			int count = 0;
 			long sum = 0;
 			TaskExecutionOutput currOutput = null;
 			for (TaskExecutionOutput output : mappedOutputs.get(taskName)) {
-				count++;
-				sum += output.executionTimeInMilliSecs();
-				currOutput = output;
-				if(!reportProgress) {
-					printTaskOutput(output);
+				if (OutputType.MEASUREMENT.equals(output.type())) {
+					count++;
+					sum += output.executionTimeInMilliSecs();
+					currOutput = output;
+				}
+				if (!reportProgress) {
+					print(outputFormat.getTaskOutput(output));
 				}
 			}
-			if (count>1) {
-				printAverage(currOutput,sum,count);
+			if (count > 1) {
+				print(outputFormat.getAverage(currOutput, sum, count));
 			}
 		}
-		
+
 		closeWriter();
 	}
 
+	private void print(String output) {
+		writer.print(output);
+		writer.flush();
+	}
+
 	protected abstract void closeWriter();
-
-	private void printAverage(TaskExecutionOutput output, long sum, int count) {
-		long average = sum/count;
-		StringBuilder msgBuilder = new StringBuilder();
-		msgBuilder.append(output.task().name());
-		msgBuilder.append(" - Average time taken is ");
-		msgBuilder.append(average);
-		msgBuilder.append(" milli seconds for ");
-		msgBuilder.append(count);
-		msgBuilder.append(" number of repeated runs");
-		writer.println(msgBuilder.toString());
-		writer.flush();
-	}
-
-	private void printTaskOutput(TaskExecutionOutput output) {
-		StringBuilder msgBuilder = new StringBuilder();
-		msgBuilder.append("The iteration ");
-		msgBuilder.append(output.iteration());
-		msgBuilder.append(" of ");
-		msgBuilder.append(output.task().name());
-		msgBuilder.append(" completed in ");
-		msgBuilder.append(output.executionTimeInMilliSecs());
-		msgBuilder.append(" milli seconds with result as - ");
-		msgBuilder.append(output.task().completedExecutionMessage());
-		writer.println(msgBuilder.toString());
-		writer.flush();
-	}
 
 }
