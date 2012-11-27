@@ -1,15 +1,16 @@
 package com.nacnez.util.microbenchmarktool.reporter.format;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import com.nacnez.util.microbenchmarktool.OutputType;
 import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
 
 public class SimpleOutputFormat implements OutputFormat {
 
 	@Override
-	public String getAverage(TaskExecutionOutput output, long sum, int count) {
-		long average = sum/count;
+	public String getAverage(TaskExecutionOutput output, DescriptiveStatistics stats) {
 		StringBuilder msgBuilder = new StringBuilder();
-		msgBuilder.append(average);
+		msgBuilder.append(stats.getMean());
 		msgBuilder.append("\n");
 		return msgBuilder.toString();
 	}

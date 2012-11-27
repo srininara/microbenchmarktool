@@ -1,17 +1,19 @@
 package com.nacnez.util.microbenchmarktool.reporter.format;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import com.nacnez.util.microbenchmarktool.OutputType;
 import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
 
-public class DescriptiveOutputFormat implements OutputFormat {
+public class VerboseOutputFormat implements OutputFormat {
 
 	@Override
-	public String getAverage(TaskExecutionOutput output, long sum, int count) {
-		long average = sum / count;
+	public String getAverage(TaskExecutionOutput output, DescriptiveStatistics stats) {
+//		long average = sum / count;
 		StringBuilder msgBuilder = new StringBuilder();
 		msgBuilder.append(output.task().name())
-				.append(" - Average time taken is ").append(average)
-				.append(" milli seconds for ").append(count)
+				.append(" - Average time taken is ").append(stats.getMean())
+				.append(" milli seconds for ").append(stats.getN())
 				.append(" number of repeated runs").append("\n");
 		return msgBuilder.toString();
 	}

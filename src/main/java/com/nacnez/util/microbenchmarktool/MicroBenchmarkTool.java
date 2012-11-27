@@ -2,7 +2,7 @@ package com.nacnez.util.microbenchmarktool;
 
 import com.nacnez.util.microbenchmarktool.core.SimpleExecutor;
 import com.nacnez.util.microbenchmarktool.reporter.StdOutReporter;
-import com.nacnez.util.microbenchmarktool.reporter.format.DescriptiveOutputFormat;
+import com.nacnez.util.microbenchmarktool.reporter.format.VerboseOutputFormat;
 import com.nacnez.util.microbenchmarktool.reporter.format.OutputFormat;
 import com.nacnez.util.microbenchmarktool.reporter.format.SimpleOutputFormat;
 
@@ -13,11 +13,11 @@ public abstract class MicroBenchmarkTool {
 	}
 	
 	public static ExecutionReporter newStandardOutputReporter() {
-		return createStandardOutputReporter(new DescriptiveOutputFormat(),false);
+		return createStandardOutputReporter(new VerboseOutputFormat(),false);
 	}
 
 	public static ExecutionReporter newStandardOutputReporterWithProgress() {
-		return createStandardOutputReporter(new DescriptiveOutputFormat(),true);
+		return createStandardOutputReporter(new VerboseOutputFormat(),true);
 	}
 	
 	public static ExecutionReporter newSimpleStandardOutputReporter() {

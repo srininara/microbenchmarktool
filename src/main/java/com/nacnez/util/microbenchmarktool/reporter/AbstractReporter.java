@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import com.nacnez.util.microbenchmarktool.OutputType;
 import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
 import com.nacnez.util.microbenchmarktool.reporter.format.OutputFormat;
@@ -41,22 +43,19 @@ public abstract class AbstractReporter {
 	public void report() throws Exception {
 
 		for (String taskName : mappedOutputs.keySet()) {
-			int count = 0;
-			long sum = 0;
 			TaskExecutionOutput currOutput = null;
+			DescriptiveStatistics stats = new DescriptiveStatistics();
+
 			for (TaskExecutionOutput output : mappedOutputs.get(taskName)) {
 				if (OutputType.MEASUREMENT.equals(output.type())) {
-					count++;
-					sum += output.executionTimeInMilliSecs();
+					stats.addValue(output.executionTimeInMilliSecs());
 					currOutput = output;
 				}
 				if (!reportProgress) {
 					print(outputFormat.getTaskOutput(output));
 				}
 			}
-			if (count > 1) {
-				print(outputFormat.getAverage(currOutput, sum, count));
-			}
+			print(outputFormat.getAverage(currOutput, stats));
 		}
 
 		closeWriter();
