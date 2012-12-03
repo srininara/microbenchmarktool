@@ -8,7 +8,7 @@ import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
 public class SimpleOutputFormat implements OutputFormat {
 
 	@Override
-	public String getAverage(TaskExecutionOutput output, DescriptiveStatistics stats) {
+	public String getStats(TaskExecutionOutput output, DescriptiveStatistics stats) {
 		StringBuilder msgBuilder = new StringBuilder();
 		msgBuilder.append(stats.getMean());
 		msgBuilder.append("\n");

@@ -8,6 +8,6 @@ public interface OutputFormat {
 
 	String getTaskOutput(TaskExecutionOutput output);
 
-	String getAverage(TaskExecutionOutput output, DescriptiveStatistics stats);
+	String getStats(TaskExecutionOutput output, DescriptiveStatistics stats);
 
 }

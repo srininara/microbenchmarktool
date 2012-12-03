@@ -55,7 +55,7 @@ public abstract class AbstractReporter {
 					print(outputFormat.getTaskOutput(output));
 				}
 			}
-			print(outputFormat.getAverage(currOutput, stats));
+			print(outputFormat.getStats(currOutput, stats));
 		}
 
 		closeWriter();

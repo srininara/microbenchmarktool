@@ -76,6 +76,6 @@ public class SimpleExecutor implements TimedTaskExecutor {
 	private static final String REPORTER_REQUIRED = "Executor needs the collector before execute";
 	private static final String INVALID_TASK = "Executor can't execute a null task";
 	private static final String PROBLEM_WITH_REPORTING = "Problem with reporting";
-	private static final int DEFAULT_REPEATS = 1;
+	private static final int DEFAULT_REPEATS = 150;
 
 }

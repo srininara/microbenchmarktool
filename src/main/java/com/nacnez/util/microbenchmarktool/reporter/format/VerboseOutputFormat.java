@@ -8,8 +8,7 @@ import com.nacnez.util.microbenchmarktool.TaskExecutionOutput;
 public class VerboseOutputFormat implements OutputFormat {
 
 	@Override
-	public String getAverage(TaskExecutionOutput output, DescriptiveStatistics stats) {
-//		long average = sum / count;
+	public String getStats(TaskExecutionOutput output, DescriptiveStatistics stats) {
 		StringBuilder msgBuilder = new StringBuilder();
 		msgBuilder.append(output.task().name())
 				.append(" - Average time taken is ").append(stats.getMean())
