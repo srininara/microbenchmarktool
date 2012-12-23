@@ -11,7 +11,7 @@ public class StatRichOutputFormatDecorator implements OutputFormat {
 	public StatRichOutputFormatDecorator(OutputFormat parent) {
 		this.parent = parent;
 	}
-	
+
 	@Override
 	public String getTaskOutput(TaskExecutionOutput output) {
 		return parent.getTaskOutput(output);
@@ -20,10 +20,16 @@ public class StatRichOutputFormatDecorator implements OutputFormat {
 	@Override
 	public String getStats(TaskExecutionOutput output,
 			DescriptiveStatistics stats) {
-		StringBuilder builder = new StringBuilder(parent.getStats(output, stats));
-		builder.append("median: ").append(stats.getPercentile(50)).append("; standard deviation: ").append(stats.getStandardDeviation());
-		builder.append("; min: ").append(stats.getMin()).append("; max: ").append(stats.getMax()).append("; 95 percentile: ").append(stats.getPercentile(95));
-		builder.append("; 5 percentile: ").append(stats.getPercentile(5)).append(";\n");
+		StringBuilder builder = new StringBuilder(
+				parent.getStats(output, stats));
+		builder.append("Median: ").append(stats.getPercentile(50))
+				.append(";\nStandard deviation: ")
+				.append(stats.getStandardDeviation());
+		builder.append(";\nMin: ").append(stats.getMin()).append(";\nMax: ")
+				.append(stats.getMax()).append(";\n95 Percentile: ")
+				.append(stats.getPercentile(95));
+		builder.append(";\n5 Percentile: ").append(stats.getPercentile(5))
+				.append(";\n--------------\n\n");
 		return builder.toString();
 	}
 

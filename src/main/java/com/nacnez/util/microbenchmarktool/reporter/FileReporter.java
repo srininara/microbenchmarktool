@@ -10,7 +10,7 @@ import com.nacnez.util.microbenchmarktool.reporter.format.OutputFormat;
 public class FileReporter extends AbstractReporter implements ExecutionReporter {
 
 	public FileReporter(OutputFormat outputFormat, boolean reportProgress, String fileName) throws Exception {
-		super(outputFormat,reportProgress,new PrintWriter(new BufferedWriter(new FileWriter(fileName))));
+		super(outputFormat,reportProgress,new PrintWriter(new BufferedWriter(new FileWriter(fileName,true))));
 	}
 
 	@Override

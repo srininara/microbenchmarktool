@@ -13,7 +13,7 @@ public class VerboseOutputFormat implements OutputFormat {
 		msgBuilder.append(output.task().name())
 				.append(" - Average time taken is ").append(stats.getMean())
 				.append(" milli seconds for ").append(stats.getN())
-				.append(" number of repeated runs").append("\n");
+				.append(" number of repeated runs").append("\n--------------\n\n");
 		return msgBuilder.toString();
 	}
 
