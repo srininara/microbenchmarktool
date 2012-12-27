@@ -1,5 +1,7 @@
 package com.nacnez.util.microbenchmarktool.reporter.format;
 
+import static com.nacnez.util.microbenchmarktool.reporter.format.FormatUtil.roundTwoDecimals;
+
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.nacnez.util.microbenchmarktool.OutputType;
@@ -10,7 +12,8 @@ public class SimpleOutputFormat implements OutputFormat {
 	@Override
 	public String getStats(TaskExecutionOutput output, DescriptiveStatistics stats) {
 		StringBuilder msgBuilder = new StringBuilder();
-		msgBuilder.append(stats.getMean());
+		msgBuilder.append("\n");
+		msgBuilder.append(roundTwoDecimals(stats.getMean()));
 		msgBuilder.append("\n");
 		return msgBuilder.toString();
 	}
